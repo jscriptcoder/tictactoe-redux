@@ -1,6 +1,7 @@
-import { combineReducers } from 'redux'
-import { SYMBOL, TicTacToeGame } from './tictactoegame'
-import { ACTIONS, ActionSymbol, ActionTurn } from './actions'
+import 'es6-shim';
+
+import { SYMBOL, TicTacToeGame, isLine } from './tictactoegame'
+import { ACTIONS, ActionSymbol, ActionTurn, changeTurn } from './actions'
 
 const initialState = new TicTacToeGame();
 
@@ -32,4 +33,24 @@ export const turn = (state: SYMBOL = initialState.turn, action: ActionTurn): SYM
 	}
 }
 
-export default combineReducers({board, turn});
+export const tictactoe = (state: TicTacToeGame = initialState, action: ActionSymbol): TicTacToeGame => {
+	switch (action.type) {
+
+		case ACTIONS.ADD_SYMBOL:
+			if (!state.board[action.i][action.j]) {
+				let newState = new TicTacToeGame();
+				newState.board = board(state.board, action);
+
+				if (isLine(newState.board, action.i, action.j)) {
+					newState.winner = state.turn;
+				} else {
+					newState.turn = turn(state.turn, changeTurn())
+				}
+
+				return newState;
+			}
+			
+		default:
+			return state;
+	}
+}
