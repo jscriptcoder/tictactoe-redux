@@ -41,7 +41,7 @@ export const tictactoe = (state: TicTacToeGame = initialState, action: ActionSym
 				let newState = new TicTacToeGame();
 				newState.board = board(state.board, action);
 
-				if (isLine(newState.board, action.i, action.j)) {
+				if (newState.isLine(action.i, action.j)) {
 					newState.winner = state.turn;
 				} else {
 					newState.turn = turn(state.turn, changeTurn())

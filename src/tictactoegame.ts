@@ -14,24 +14,6 @@ export const string2Symbol = (symbol: string): SYMBOL => {
 		case 'O': return SYMBOL.O;
 		default: return SYMBOL.X;
 	}	
-} 
-
-
-const isHorizontalLine = (board: SYMBOL[][], i: number, j: number): boolean {
-
-}
-
-const isVerticalLine = (board: SYMBOL[][], i: number, j: number): boolean {
-
-}
-
-const isDiagonalLine = (board: SYMBOL[][], i: number, j: number): boolean {
-	
-}
-
-export const isLine = (board: SYMBOL[][], i: number, j: number): boolean {
-	const symbol = board[i][j];
-	return isHorizontalLine(board, i, j) || isVerticalLine(board, i, j) || isDiagonalLine(board, i, j);
 }
 
 export class TicTacToeGame {
@@ -56,4 +38,16 @@ export class TicTacToeGame {
 
 		return board;
 	}
+
+	public isLine(i: number, j: number): boolean {
+		return this.isHorizontalLine(i, j) || 
+			this.isVerticalLine(i, j) || 
+			this.isDiagonalLine(i, j);
+	}
+
+	private isHorizontalLine(i: number, j: number): boolean {}
+
+	private isVerticalLine(i: number, j: number): boolean { }
+
+	private isDiagonalLine(i: number, j: number): boolean { }
 }
