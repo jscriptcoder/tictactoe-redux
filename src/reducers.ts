@@ -1,7 +1,7 @@
 import 'es6-shim';
 
-import { SYMBOL, TicTacToeGame, isLine } from './tictactoegame'
-import { ACTIONS, ActionSymbol, ActionTurn, changeTurn } from './actions'
+import { SYMBOL, TicTacToeGame} from './tictactoegame'
+import { ACTIONS, ActionMove, ActionSymbol, ActionTurn, addSymbol, changeTurn } from './actions'
 
 const initialState = new TicTacToeGame();
 
@@ -33,13 +33,14 @@ export const turn = (state: SYMBOL = initialState.turn, action: ActionTurn): SYM
 	}
 }
 
-export const tictactoe = (state: TicTacToeGame = initialState, action: ActionSymbol): TicTacToeGame => {
+export const tictactoe = (state: TicTacToeGame = initialState, action: ActionMove): TicTacToeGame => {
 	switch (action.type) {
 
-		case ACTIONS.ADD_SYMBOL:
-			if (!state.board[action.i][action.j]) {
+		case ACTIONS.NEW_MOVE:
+			if (!state.board[action.i][action.j] && !state.isWinner()) {
 				let newState = new TicTacToeGame();
-				newState.board = board(state.board, action);
+				newState.board = board(state.board, addSymbol(action.i, action.j, state.turn));
+				newState.turn = state.turn;
 
 				if (newState.isLine(action.i, action.j)) {
 					newState.winner = state.turn;
