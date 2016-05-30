@@ -1,4 +1,4 @@
-export enum SYMBOL { X, O }
+export enum SYMBOL { EMPTY, X, O }
 
 export const symbol2String = (symbol: SYMBOL): string => {
 	switch (symbol) {
@@ -12,7 +12,7 @@ export const string2Symbol = (symbol: string): SYMBOL => {
 	switch (symbol.toUpperCase()) {
 		case 'X': return SYMBOL.X;
 		case 'O': return SYMBOL.O;
-		default: return SYMBOL.X;
+		default: return SYMBOL.EMPTY;
 	}	
 }
 
@@ -22,6 +22,7 @@ export class TicTacToeGame {
 	public turn: SYMBOL;
 
 	constructor(size: number = 3) {
+		this.winner = SYMBOL.EMPTY;
 		this.board = this.createBoard(size);
 		this.turn = SYMBOL.X;
 	}
@@ -32,28 +33,36 @@ export class TicTacToeGame {
 
 	public toString(): string {
 		const size = this.board.length;
-		let game = '+---+---+---+\n';
+		let strGame = '+---+---+---+\n';
 
 		for (let i = 0; i < size; i++) {
-			game += '|   |   |   |\n';
+			strGame += '|   |   |   |\n';
 			for (let j = 0; j < size; j++) {
-				game += `| ${symbol2String(this.board[i][j])} `;
+				strGame += `| ${symbol2String(this.board[i][j])} `;
 			}
-			game += '|\n|   |   |   |\n';
-			game += '+---+---+---+\n';
+			strGame += '|\n|   |   |   |\n';
+			strGame += '+---+---+---+\n';
 		}
 
 		if (this.isWinner()) {
-			game += `Winner: ${symbol2String(this.winner)}`;
+			strGame += `Winner: ${symbol2String(this.winner)}`;
 		} else {
-			game += `Turn: ${symbol2String(this.turn)}`;
+			strGame += `Turn: ${symbol2String(this.turn)}`;
 		}
 
-		return game;
+		return strGame;
 	}
 
 	public isWinner(): boolean {
-		return typeof this.winner !== 'undefined';
+		return this.winner !== SYMBOL.EMPTY;
+	}
+
+	public isCellEmpty(i: number, j: number): boolean {
+		return this.board[i][j] === SYMBOL.EMPTY;
+	}
+
+	public canPlay(i: number, j: number): boolean {
+		return this.isCellEmpty(i, j) && !this.isWinner();
 	}
 
 	private createBoard(size: number): SYMBOL[][] {
@@ -62,7 +71,7 @@ export class TicTacToeGame {
 		for (let i = 0; i < size; i++) {
 			board[i] = [];
 			for (let j = 0; j < size; j++) {
-				board[i][j] = void 0;
+				board[i][j] = SYMBOL.EMPTY;
 			}
 		}
 
