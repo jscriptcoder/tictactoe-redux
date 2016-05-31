@@ -1,10 +1,10 @@
 import './index.scss'
 import { createStore } from 'redux'
-import { tictactoe } from './reducers'
 import { newMove } from './actions'
-import TicTacToeGame from './tictactoegame' 
+import { tictactoe } from './reducers'
+import TicTacToe from './models/tictactoe'
 
-let store = createStore<TicTacToeGame>(tictactoe);
+let store = createStore<TicTacToe>(tictactoe);
 
 store.subscribe(() => {
 	console.log(store.getState().toString() + '\n\n');

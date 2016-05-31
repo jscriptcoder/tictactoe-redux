@@ -1,7 +1,7 @@
 import { TILE, tile2String } from './tile'
 
-// This class will hold the state of the game
-export default class TicTacToeGame {
+// state of the game
+export default class TicTacToe {
 	public winner: TILE;
 	public board: TILE[][];
 	public turn: TILE;
@@ -16,6 +16,19 @@ export default class TicTacToeGame {
 		return this.isHorizontalLine(i) || this.isVerticalLine(j) || this.isDiagonalLine();
 	}
 
+	public isWinner(): boolean {
+		return this.winner !== TILE.EMPTY;
+	}
+
+	public isTileEmpty(i: number, j: number): boolean {
+		return this.board[i][j] === TILE.EMPTY;
+	}
+
+	public canPlay(i: number, j: number): boolean {
+		return this.isTileEmpty(i, j) && !this.isWinner();
+	}
+
+	// for debugging purposes
 	public toString(): string {
 		const size = this.board.length;
 		let strGame = '+---+---+---+\n';
@@ -36,18 +49,6 @@ export default class TicTacToeGame {
 		}
 
 		return strGame;
-	}
-
-	public isWinner(): boolean {
-		return this.winner !== TILE.EMPTY;
-	}
-
-	public isTileEmpty(i: number, j: number): boolean {
-		return this.board[i][j] === TILE.EMPTY;
-	}
-
-	public canPlay(i: number, j: number): boolean {
-		return this.isTileEmpty(i, j) && !this.isWinner();
 	}
 
 	private createBoard(size: number): TILE[][] {

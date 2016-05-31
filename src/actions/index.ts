@@ -1,4 +1,4 @@
-import { TILE } from './tile';
+import { TILE } from '../models/tile';
 
 export enum ACTIONS {
 	NEW_MOVE,
@@ -19,9 +19,7 @@ export interface ActionTile extends ActionMove {
 
 export interface ActionTurn extends Action {}
 
-/*******************
- * Action Creators *
- *******************/
+// action creators
 export const newMove = (i: number, j: number): ActionMove => {
 	return { type: ACTIONS.NEW_MOVE, i, j }
 }
