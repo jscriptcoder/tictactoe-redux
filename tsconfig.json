@@ -1,9 +1,12 @@
 {
     "compileOptions": {
         "target": "es5",
-        "sourceMap": true   
+        "sourceMap": true
     },
     "exclude": [
-        "node_modules"    
+        "node_modules"
+    ],
+    "filesGlob": [
+        "typings/index.d.ts"
     ]
 }

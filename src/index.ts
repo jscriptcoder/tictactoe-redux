@@ -1,9 +1,8 @@
 import './index.scss'
-
 import { createStore } from 'redux'
 import { tictactoe } from './reducers'
 import { newMove } from './actions'
-import { TicTacToeGame, string2Symbol } from './tictactoegame' 
+import TicTacToeGame from './tictactoegame' 
 
 let store = createStore<TicTacToeGame>(tictactoe);
 

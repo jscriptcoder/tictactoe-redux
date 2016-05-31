@@ -1,30 +1,15 @@
-export enum SYMBOL { EMPTY, X, O }
+import { TILE, tile2String } from './tile'
 
-export const symbol2String = (symbol: SYMBOL): string => {
-	switch (symbol) {
-		case SYMBOL.X: return 'X';
-		case SYMBOL.O: return 'O';
-		default: return '-';
-	}
-}
-
-export const string2Symbol = (symbol: string): SYMBOL => {
-	switch (symbol.toUpperCase()) {
-		case 'X': return SYMBOL.X;
-		case 'O': return SYMBOL.O;
-		default: return SYMBOL.EMPTY;
-	}	
-}
-
-export class TicTacToeGame {
-	public winner: SYMBOL;
-	public board: SYMBOL[][];
-	public turn: SYMBOL;
+// This class will hold the state of the game
+export default class TicTacToeGame {
+	public winner: TILE;
+	public board: TILE[][];
+	public turn: TILE;
 
 	constructor(size: number = 3) {
-		this.winner = SYMBOL.EMPTY;
+		this.winner = TILE.EMPTY;
 		this.board = this.createBoard(size);
-		this.turn = SYMBOL.X;
+		this.turn = TILE.X;
 	}
 
 	public isLine(i: number, j: number): boolean {
@@ -38,40 +23,40 @@ export class TicTacToeGame {
 		for (let i = 0; i < size; i++) {
 			strGame += '|   |   |   |\n';
 			for (let j = 0; j < size; j++) {
-				strGame += `| ${symbol2String(this.board[i][j])} `;
+				strGame += `| ${tile2String(this.board[i][j])} `;
 			}
 			strGame += '|\n|   |   |   |\n';
 			strGame += '+---+---+---+\n';
 		}
 
 		if (this.isWinner()) {
-			strGame += `Winner: ${symbol2String(this.winner)}`;
+			strGame += `Winner: ${tile2String(this.winner)}`;
 		} else {
-			strGame += `Turn: ${symbol2String(this.turn)}`;
+			strGame += `Turn: ${tile2String(this.turn)}`;
 		}
 
 		return strGame;
 	}
 
 	public isWinner(): boolean {
-		return this.winner !== SYMBOL.EMPTY;
+		return this.winner !== TILE.EMPTY;
 	}
 
-	public isCellEmpty(i: number, j: number): boolean {
-		return this.board[i][j] === SYMBOL.EMPTY;
+	public isTileEmpty(i: number, j: number): boolean {
+		return this.board[i][j] === TILE.EMPTY;
 	}
 
 	public canPlay(i: number, j: number): boolean {
-		return this.isCellEmpty(i, j) && !this.isWinner();
+		return this.isTileEmpty(i, j) && !this.isWinner();
 	}
 
-	private createBoard(size: number): SYMBOL[][] {
+	private createBoard(size: number): TILE[][] {
 		let board = [];
 
 		for (let i = 0; i < size; i++) {
 			board[i] = [];
 			for (let j = 0; j < size; j++) {
-				board[i][j] = SYMBOL.EMPTY;
+				board[i][j] = TILE.EMPTY;
 			}
 		}
 
@@ -116,6 +101,7 @@ export class TicTacToeGame {
 		}
 
 		if (!is) {
+			// let's check the other diagonal
 			for (let i = 0, j = size - 1; i < size && j >= 0; i++ , j--) {
 				is = this.board[i][j] === this.turn;
 				if (!is) break;

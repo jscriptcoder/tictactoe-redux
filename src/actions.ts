@@ -1,8 +1,8 @@
-import { SYMBOL } from './tictactoegame';
+import { TILE } from './tile';
 
 export enum ACTIONS {
 	NEW_MOVE,
-	ADD_SYMBOL,
+	ADD_TILE,
 	CHANGE_TURN
 }
 
@@ -13,8 +13,8 @@ export interface ActionMove extends Action {
 	j: number;
 }
 
-export interface ActionSymbol extends ActionMove {
-	symbol: SYMBOL;
+export interface ActionTile extends ActionMove {
+	tile: TILE;
 }
 
 export interface ActionTurn extends Action {}
@@ -26,8 +26,8 @@ export const newMove = (i: number, j: number): ActionMove => {
 	return { type: ACTIONS.NEW_MOVE, i, j }
 }
 
-export const addSymbol = (i: number, j: number, symbol: SYMBOL): ActionSymbol => {
-	return { type: ACTIONS.ADD_SYMBOL, i, j, symbol }
+export const addTile = (i: number, j: number, tile: TILE): ActionTile => {
+	return { type: ACTIONS.ADD_TILE, i, j, tile }
 }
 
 export const changeTurn = (): ActionTurn => {
