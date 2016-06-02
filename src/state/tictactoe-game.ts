@@ -1,7 +1,7 @@
 import { TILE, tile2String } from './tile'
 
 // state of the game
-export default class TicTacToe {
+export default class TicTacToeGame {
 	public winner: TILE;
 	public board: TILE[][];
 	public turn: TILE;

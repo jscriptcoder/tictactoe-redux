@@ -1,9 +1,12 @@
+import './tictactoe.scss';
 import Board from './board'
-import HTMLComponent from './htmlcomponent'
+import Component from './component'
+
+export 
 
 const TMPL = `
 <div class="tictactoe">
-	<h1>..:: Tic Tac Toe ::..<h1>
+	<h1>..:: Tic Tac Toe ::..</h1>
 	<div class="tictactoe-inner">
 		<div class="tictactoe-board"></div>
 		<div class="tictactoe-info"></div>
@@ -11,10 +14,10 @@ const TMPL = `
 </div>
 `;
 
-export default class TicTacToe extends HTMLComponent {
+export default class TicTacToe extends Component {
 
 	private board: Board;
-	private title: HTMLHeadingElement;
+	private title: HTMLElement;
 	private info: HTMLElement;
 
 	constructor(container: HTMLElement, size?: number) {
@@ -28,10 +31,15 @@ export default class TicTacToe extends HTMLComponent {
 	}
 
 	protected buildDOM(size?: number) {
-		this.el = HTMLComponent.string2Element(TMPL);
-		this.title = <HTMLHeadingElement>HTMLComponent.findElement('.tictactoe-board');
-		this.info = HTMLComponent.findElement('.tictactoe-info');
-		this.board = this.makeBoard(HTMLComponent.findElement('.tictactoe-board'), size);
+		this.el = Component.string2Element(TMPL);
+		this.title = this.findElement('h1');
+		this.info = this.findElement('.tictactoe-info');
+		this.board = this.makeBoard(this.findElement('.tictactoe-board'), size);
+		this.container.appendChild(this.el);
+	}
+
+	public onCellClick(} {
+
 	}
 
 }

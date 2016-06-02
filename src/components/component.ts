@@ -1,26 +1,26 @@
-abstract class HTMLComponent {
+abstract class Component {
 
 	protected container: HTMLElement;
 	protected el: HTMLElement;
 
 	constructor(container: HTMLElement) {
 		this.container = container;
-		this.buildDOM();
 	}
 
-	// only works if there is one root element
-	public static string2Element(strHtml: string): HTMLElement {
-		let div = document.createElement('div');
-		div.innerHTML = strHtml;
-		return <HTMLElement>div.firstChild;
-	}
-
-	public static findElement(selector: string): HTMLElement {
-		return <HTMLElement>document.querySelector(selector);
+	public findElement(selector: string): HTMLElement {
+		const root = this.el || this.container;
+		return <HTMLElement>root.querySelector(selector);
 	}
 
 	protected abstract buildDOM(): void;
 
+	// only works if there is one root element
+	// todo: createDocumentFragment instead?
+	public static string2Element(strHtml: string): HTMLElement {
+		let div = document.createElement('div');
+		div.innerHTML = strHtml.trim();
+		return <HTMLElement>div.firstChild;
+	}
 }
 
-export default HTMLComponent;
+export default Component;

@@ -1,6 +1,6 @@
 import 'es6-shim';
-import TicTacToe from '../models/tictactoe'
-import { TILE } from '../models/tile'
+import TicTacToeGame from '../state/tictactoe-game'
+import { TILE } from '../state/tile'
 import {
 	ACTIONS, 
 	ActionMove, 
@@ -9,7 +9,7 @@ import {
 	addTile, 
 	changeTurn } from '../actions'
 
-const initialState = new TicTacToe();
+const initialState = new TicTacToeGame();
 
 export const board = (state: TILE[][] = initialState.board, action: ActionTile): TILE[][] => {
 	switch (action.type) {
@@ -40,13 +40,13 @@ export const turn = (state: TILE = initialState.turn, action: ActionTurn): TILE 
 }
 
 // main reducer
-export const tictactoe = (state: TicTacToe = initialState, action: ActionMove): TicTacToe => {
+export const tictactoe = (state: TicTacToeGame = initialState, action: ActionMove): TicTacToeGame => {
 	switch (action.type) {
 
 		case ACTIONS.NEW_MOVE:
 			if (state.canPlay(action.i, action.j)) {
 
-				let newState = <TicTacToe>Object.assign(new TicTacToe(), {
+				let newState = <TicTacToeGame>Object.assign(new TicTacToeGame(), {
 					board: board(state.board, addTile(action.i, action.j, state.turn)),
 					turn: state.turn
 				});

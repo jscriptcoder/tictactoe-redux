@@ -1,0 +1,19 @@
+@import 'vars';
+
+.tictactoe {
+
+	@extend .fullsize;
+
+	h1 {
+		text-align: center;
+	}
+
+	.tictactoe-inner, 
+	.tictactoe-board {
+		@extend .fullsize;
+	}
+
+	.tictactoe-info {
+
+	}
+}

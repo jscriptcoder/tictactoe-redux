@@ -47,8 +47,8 @@
 	"use strict";
 	__webpack_require__(1);
 	var redux_1 = __webpack_require__(5);
-	var actions_1 = __webpack_require__(19);
-	var reducers_1 = __webpack_require__(20);
+	var reducers_1 = __webpack_require__(19);
+	var tictactoe_1 = __webpack_require__(24);
 	var store = redux_1.createStore(reducers_1.tictactoe);
 	store.subscribe(function () {
 	    console.log(store.getState().toString() + '\n\n');
@@ -68,14 +68,17 @@
 	store.dispatch(newMove(0, 2));
 	store.dispatch(newMove(1, 2)); // won't happen
 	*/
-	store.dispatch(actions_1.newMove(1, 1));
-	store.dispatch(actions_1.newMove(1, 0));
-	store.dispatch(actions_1.newMove(0, 0));
-	store.dispatch(actions_1.newMove(2, 2));
-	store.dispatch(actions_1.newMove(2, 0));
-	store.dispatch(actions_1.newMove(0, 2));
-	store.dispatch(actions_1.newMove(2, 1));
-	store.dispatch(actions_1.newMove(1, 2));
+	/*
+	store.dispatch(newMove(1, 1));
+	store.dispatch(newMove(1, 0));
+	store.dispatch(newMove(0, 0));
+	store.dispatch(newMove(2, 2));
+	store.dispatch(newMove(2, 0));
+	store.dispatch(newMove(0, 2));
+	store.dispatch(newMove(2, 1));
+	store.dispatch(newMove(1, 2));
+	*/
+	new tictactoe_1["default"](document.getElementById('game'));
 
 
 /***/ },
@@ -1368,39 +1371,14 @@
 
 /***/ },
 /* 19 */
-/***/ function(module, exports) {
-
-	"use strict";
-	(function (ACTIONS) {
-	    ACTIONS[ACTIONS["NEW_MOVE"] = 0] = "NEW_MOVE";
-	    ACTIONS[ACTIONS["ADD_TILE"] = 1] = "ADD_TILE";
-	    ACTIONS[ACTIONS["CHANGE_TURN"] = 2] = "CHANGE_TURN";
-	})(exports.ACTIONS || (exports.ACTIONS = {}));
-	var ACTIONS = exports.ACTIONS;
-	/*******************
-	 * Action Creators *
-	 *******************/
-	exports.newMove = function (i, j) {
-	    return { type: ACTIONS.NEW_MOVE, i: i, j: j };
-	};
-	exports.addTile = function (i, j, tile) {
-	    return { type: ACTIONS.ADD_TILE, i: i, j: j, tile: tile };
-	};
-	exports.changeTurn = function () {
-	    return { type: ACTIONS.CHANGE_TURN };
-	};
-
-
-/***/ },
-/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	__webpack_require__(21);
-	var tictactoegame_1 = __webpack_require__(22);
-	var tile_1 = __webpack_require__(23);
-	var actions_1 = __webpack_require__(19);
-	var initialState = new tictactoegame_1["default"]();
+	__webpack_require__(20);
+	var tictactoe_game_1 = __webpack_require__(21);
+	var tile_1 = __webpack_require__(22);
+	var actions_1 = __webpack_require__(23);
+	var initialState = new tictactoe_game_1["default"]();
 	exports.board = function (state, action) {
 	    if (state === void 0) { state = initialState.board; }
 	    switch (action.type) {
@@ -1426,13 +1404,13 @@
 	            return state;
 	    }
 	};
-	// Main reducer
+	// main reducer
 	exports.tictactoe = function (state, action) {
 	    if (state === void 0) { state = initialState; }
 	    switch (action.type) {
 	        case actions_1.ACTIONS.NEW_MOVE:
 	            if (state.canPlay(action.i, action.j)) {
-	                var newState = Object.assign(new tictactoegame_1["default"](), {
+	                var newState = Object.assign(new tictactoe_game_1["default"](), {
 	                    board: exports.board(state.board, actions_1.addTile(action.i, action.j, state.turn)),
 	                    turn: state.turn
 	                });
@@ -1453,7 +1431,7 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, process) { /*!
@@ -5237,12 +5215,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(6)))
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var tile_1 = __webpack_require__(23);
-	// This class will hold the state of the game
+	var tile_1 = __webpack_require__(22);
+	// state of the game
 	var TicTacToeGame = (function () {
 	    function TicTacToeGame(size) {
 	        if (size === void 0) { size = 3; }
@@ -5253,6 +5231,16 @@
 	    TicTacToeGame.prototype.isLine = function (i, j) {
 	        return this.isHorizontalLine(i) || this.isVerticalLine(j) || this.isDiagonalLine();
 	    };
+	    TicTacToeGame.prototype.isWinner = function () {
+	        return this.winner !== tile_1.TILE.EMPTY;
+	    };
+	    TicTacToeGame.prototype.isTileEmpty = function (i, j) {
+	        return this.board[i][j] === tile_1.TILE.EMPTY;
+	    };
+	    TicTacToeGame.prototype.canPlay = function (i, j) {
+	        return this.isTileEmpty(i, j) && !this.isWinner();
+	    };
+	    // for debugging purposes
 	    TicTacToeGame.prototype.toString = function () {
 	        var size = this.board.length;
 	        var strGame = '+---+---+---+\n';
@@ -5271,15 +5259,6 @@
 	            strGame += "Turn: " + tile_1.tile2String(this.turn);
 	        }
 	        return strGame;
-	    };
-	    TicTacToeGame.prototype.isWinner = function () {
-	        return this.winner !== tile_1.TILE.EMPTY;
-	    };
-	    TicTacToeGame.prototype.isTileEmpty = function (i, j) {
-	        return this.board[i][j] === tile_1.TILE.EMPTY;
-	    };
-	    TicTacToeGame.prototype.canPlay = function (i, j) {
-	        return this.isTileEmpty(i, j) && !this.isWinner();
 	    };
 	    TicTacToeGame.prototype.createBoard = function (size) {
 	        var board = [];
@@ -5338,7 +5317,7 @@
 
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5363,6 +5342,135 @@
 	        default: return TILE.EMPTY;
 	    }
 	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	"use strict";
+	(function (ACTIONS) {
+	    ACTIONS[ACTIONS["NEW_MOVE"] = 0] = "NEW_MOVE";
+	    ACTIONS[ACTIONS["ADD_TILE"] = 1] = "ADD_TILE";
+	    ACTIONS[ACTIONS["CHANGE_TURN"] = 2] = "CHANGE_TURN";
+	})(exports.ACTIONS || (exports.ACTIONS = {}));
+	var ACTIONS = exports.ACTIONS;
+	// action creators
+	exports.newMove = function (i, j) {
+	    return { type: ACTIONS.NEW_MOVE, i: i, j: j };
+	};
+	exports.addTile = function (i, j, tile) {
+	    return { type: ACTIONS.ADD_TILE, i: i, j: j, tile: tile };
+	};
+	exports.changeTurn = function () {
+	    return { type: ACTIONS.CHANGE_TURN };
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var board_1 = __webpack_require__(25);
+	var component_1 = __webpack_require__(26);
+	var TMPL = "\n<div class=\"tictactoe\">\n\t<h1 class=\"tictactoe-title\">..:: Tic Tac Toe ::..<h1>\n\t<div class=\"tictactoe-inner\">\n\t\t<div class=\"tictactoe-board\"></div>\n\t\t<div class=\"tictactoe-info\"></div>\n\t</div>\n</div>\n";
+	var TicTacToe = (function (_super) {
+	    __extends(TicTacToe, _super);
+	    function TicTacToe(container, size) {
+	        _super.call(this, container);
+	        this.buildDOM(size);
+	    }
+	    // easier to mock
+	    TicTacToe.prototype.makeBoard = function (container, size) {
+	        return new board_1["default"](container, size);
+	    };
+	    TicTacToe.prototype.buildDOM = function (size) {
+	        this.el = component_1["default"].string2Element(TMPL);
+	        this.title = this.findElement('h1');
+	        this.info = this.findElement('.tictactoe-info');
+	        this.board = this.makeBoard(this.findElement('.tictactoe-board'), size);
+	        this.container.appendChild(this.el);
+	    };
+	    return TicTacToe;
+	}(component_1["default"]));
+	exports.__esModule = true;
+	exports["default"] = TicTacToe;
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var component_1 = __webpack_require__(26);
+	var TMPL_BOARD = '<div class="board"></div>';
+	var TMPL_ROW = '<div class="board-row"></div>';
+	var TMPL_CELL = '<div class="board-cell"></div>';
+	var Board = (function (_super) {
+	    __extends(Board, _super);
+	    function Board(container, size) {
+	        _super.call(this, container);
+	        this.container = container;
+	        this.buildDOM(size);
+	    }
+	    Board.prototype.buildDOM = function (size) {
+	        if (size === void 0) { size = 3; }
+	        this.el = component_1["default"].string2Element(TMPL_BOARD);
+	        var row;
+	        var cell;
+	        for (var i = 0; i < size; i++) {
+	            row = component_1["default"].string2Element(TMPL_ROW);
+	            this.el.appendChild(row);
+	            for (var j = 0; j < size; j++) {
+	                cell = component_1["default"].string2Element(TMPL_CELL);
+	                cell.dataset['cell'] = "[" + i + ", " + j + "]";
+	                row.appendChild(cell);
+	            }
+	        }
+	        this.container.appendChild(this.el);
+	    };
+	    return Board;
+	}(component_1["default"]));
+	exports.__esModule = true;
+	exports["default"] = Board;
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Component = (function () {
+	    function Component(container) {
+	        this.container = container;
+	        this.buildDOM();
+	    }
+	    Component.prototype.findElement = function (selector) {
+	        var root = this.el || this.container;
+	        return root.querySelector(selector);
+	    };
+	    // only works if there is one root element
+	    // todo: createDocumentFragment instead?
+	    Component.string2Element = function (strHtml) {
+	        var div = document.createElement('div');
+	        div.innerHTML = strHtml;
+	        return div.firstChild;
+	    };
+	    return Component;
+	}());
+	exports.__esModule = true;
+	exports["default"] = Component;
 
 
 /***/ }

@@ -1,0 +1,27 @@
+@import 'vars';
+
+.board {
+
+	@extend .fullsize;
+
+	.board-row {
+		@extend .clearfix;
+		border-bottom: 2px solid;
+
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
+
+	.board-cell {
+		@extend .unit;
+		height: 100%;
+		border-right: 2px solid;
+		cursor: pointer;
+
+		&:last-child {
+			border-right: 0;
+		}
+	}
+	
+}

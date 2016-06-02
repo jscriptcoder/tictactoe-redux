@@ -1,4 +1,4 @@
-import { TILE } from '../models/tile';
+import { TILE } from '../state/tile';
 
 export enum ACTIONS {
 	NEW_MOVE,
