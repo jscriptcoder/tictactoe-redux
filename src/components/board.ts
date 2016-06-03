@@ -1,15 +1,27 @@
-import 'es6-shim'
 import './board.scss'
+import 'es6-shim'
+import { Subject } from 'rxjs/Subject'
+import { Subscription } from 'rxjs/Subscription'
 import Component from './component'
 
 const TMPL_BOARD = '<div class="board"></div>';
 const TMPL_ROW = '<div class="board-row"></div>';
 const TMPL_CELL = '<div class="board-cell"></div>';
 
-export default class Board extends Component {
+export interface CellPosition {
+	i: number;
+	j: number;
+}
+
+export class Board extends Component {
+
+	private cellClickListener: EventListener;
+	private clickSubject: Subject<CellPosition>;
 
 	constructor(container: HTMLElement, size?: number) {
 		super(container);
+		this.cellClickListener = this.cellClick.bind(this);
+		this.clickSubject = new Subject();
 		this.buildDOM(size);
 	}
 
@@ -33,7 +45,28 @@ export default class Board extends Component {
 			}
 		}
 
+		this.el.addEventListener('click', this.cellClickListener);
+
 		this.container.appendChild(this.el);
+	}
+
+	private cellClick(mouseEvent: MouseEvent): void {
+		const target = <HTMLElement>mouseEvent.target;
+		if (target.classList.contains('board-cell')) {
+			const datacell = JSON.parse(target.dataset['cell']);
+			this.clickSubject.next(<CellPosition>{
+				i: datacell[0],
+				j: datacell[1]
+			});
+		}
+	}
+
+	public subscribeClick(callback: {(cellPos: CellPosition): void}): Subscription {
+		return this.clickSubject.subscribe(callback);
+	}
+
+	public destroy(): void {
+		this.el.removeEventListener('click', this.cellClickListener);
 	}
 
 }

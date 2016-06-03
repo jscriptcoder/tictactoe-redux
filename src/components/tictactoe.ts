@@ -1,8 +1,6 @@
 import './tictactoe.scss';
-import Board from './board'
 import Component from './component'
-
-export 
+import { CellPosition, Board } from './board'
 
 const TMPL = `
 <div class="tictactoe">
@@ -38,8 +36,12 @@ export default class TicTacToe extends Component {
 		this.container.appendChild(this.el);
 	}
 
-	public onCellClick(} {
+	public onBoardClick(callback: {(cellPos: CellPosition): void}) {
+		this.board.subscribeClick(callback);
+	}
 
+	public destroy(): void {
+		this.board.destroy();
 	}
 
 }
