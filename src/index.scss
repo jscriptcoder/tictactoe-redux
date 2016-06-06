@@ -1,3 +1,5 @@
+@import 'vars';
+
 html, body { height: 100%; }
 
 * {
@@ -11,7 +13,18 @@ body {
 }
 
 #game {
-	width: 300px;
-	height: 300px;
+	@include square($board-small);
 	margin: auto;
+}
+
+@media screen and (min-width: 768px) {
+    
+	#game { @include square($board-medium); }
+
+}
+
+@media screen and (min-width: 1200px) {
+    
+	#game { @include square($board-large); }
+    
 }

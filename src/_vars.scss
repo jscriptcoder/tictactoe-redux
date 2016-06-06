@@ -1,0 +1,29 @@
+$board-small: 300px;
+$x-top-small: 40%;
+
+$board-medium: 400px;
+$x-top-medium: 42%;
+
+$board-large: 500px;
+$x-top-large: 44%;
+
+$tile-width: 15px;
+$tile-color: darkgrey;
+
+@mixin square($size) {
+	width: $size;
+	height: $size;	
+}
+
+.fullsize {
+	@include square(100%);
+}
+
+.clearfix {
+	overflow: hidden;
+}
+
+.unit {
+	float: left;
+}
+
