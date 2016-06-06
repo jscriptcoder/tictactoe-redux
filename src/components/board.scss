@@ -8,20 +8,36 @@
 		@extend .clearfix;
 		border-bottom: 2px solid;
 
-		&:last-child {
-			border-bottom: 0;
-		}
+		&:last-child { border-bottom: 0; }
 	}
 
 	.board-cell {
 		@extend .unit;
 		height: 100%;
 		border-right: 2px solid;
+        padding: 10px;
 		cursor: pointer;
 
-		&:last-child {
-			border-right: 0;
-		}
+		&:last-child { border-right: 0; }
+
+        & .x,
+        & .o { @extend .fullsize; }
+
+        & .x:before,
+        & .x:after {
+            width: 100%;
+            height: $tile-width;
+            content: " ";
+            display: block;
+            background-color: $tile-color;
+        }
+        & .x:before { transform: rotate(-45deg); }
+        & .x:after { transform: rotate(45deg); }
+
+        & .o {
+            border: $tile-width solid $tile-color;
+            border-radius: 50%;
+        }
 	}
 	
 }
