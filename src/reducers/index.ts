@@ -1,6 +1,6 @@
 import 'es6-shim';
 import TicTacToeState from '../state'
-import { TILE } from '../state/tile'
+import { TILE } from '../components/tile'
 import {
 	ACTIONS, 
 	ActionMove, 

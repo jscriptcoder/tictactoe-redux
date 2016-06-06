@@ -1,4 +1,4 @@
-import { TILE } from '../state/tile';
+import { TILE } from '../components/tile';
 
 export enum ACTIONS {
 	NEW_MOVE,

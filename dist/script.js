@@ -50,9 +50,21 @@
 	var actions_1 = __webpack_require__(19);
 	var reducers_1 = __webpack_require__(20);
 	var tictactoe_1 = __webpack_require__(24);
+	var tictactoeGame = new tictactoe_1["default"](document.getElementById('game'));
 	var store = redux_1.createStore(reducers_1.tictactoe);
+	tictactoeGame.onBoardClick(function (cellPos) {
+	    // an interaction occurred. Let's change the state
+	    store.dispatch(actions_1.newMove(cellPos.i, cellPos.j));
+	});
 	store.subscribe(function () {
-	    console.log(store.getState() + '\n\n');
+	    // the state has changed. Let's notify the view
+	    var tictactoeState = store.getState();
+	    console.log(tictactoeState + '\n\n');
+	    if (tictactoeState.isWinner()) {
+	    }
+	    else {
+	        tictactoeGame.setTiles(tictactoeState.board);
+	    }
 	});
 	/*
 	store.dispatch(newMove(1, 1));
@@ -79,10 +91,6 @@
 	store.dispatch(newMove(2, 1));
 	store.dispatch(newMove(1, 2)); // last move
 	*/
-	var tictactoeGame = new tictactoe_1["default"](document.getElementById('game'));
-	tictactoeGame.onBoardClick(function (cellPos) {
-	    store.dispatch(actions_1.newMove(cellPos.i, cellPos.j));
-	});
 
 
 /***/ },
@@ -5274,7 +5282,7 @@
 	        for (var i = 0; i < size; i++) {
 	            strGame += '|   |   |   |\n';
 	            for (var j = 0; j < size; j++) {
-	                strGame += "| " + tile_1.tile2String(this.board[i][j]) + " ";
+	                strGame += "| " + tile_1.tile2String(this.board[i][j], false) + " ";
 	            }
 	            strGame += '|\n|   |   |   |\n';
 	            strGame += '+---+---+---+\n';
@@ -5354,12 +5362,13 @@
 	    TILE[TILE["O"] = 2] = "O";
 	})(exports.TILE || (exports.TILE = {}));
 	var TILE = exports.TILE;
-	exports.tile2String = function (symbol) {
-	    switch (symbol) {
+	exports.tile2String = function (tile, toEmpty) {
+	    if (toEmpty === void 0) { toEmpty = true; }
+	    switch (tile) {
 	        case TILE.X: return 'X';
 	        case TILE.O: return 'O';
 	        case TILE.EMPTY:
-	        default: return '-';
+	        default: return toEmpty ? 'EMPTY' : '-';
 	    }
 	};
 	exports.string2Tile = function (tile) {
@@ -5404,6 +5413,12 @@
 	    };
 	    TicTacToe.prototype.onBoardClick = function (callback) {
 	        this.board.subscribeClick(callback);
+	    };
+	    TicTacToe.prototype.setTile = function (i, j, tile) {
+	        this.board.setTile(i, j, tile);
+	    };
+	    TicTacToe.prototype.setTiles = function (board) {
+	        this.board.setTiles(board);
 	    };
 	    TicTacToe.prototype.destroy = function () {
 	        this.board.destroy();
@@ -5493,10 +5508,11 @@
 	__webpack_require__(29);
 	__webpack_require__(21);
 	var Subject_1 = __webpack_require__(31);
+	var tile_1 = __webpack_require__(23);
 	var component_1 = __webpack_require__(27);
 	var TMPL_BOARD = '<div class="board"></div>';
 	var TMPL_ROW = '<div class="board-row"></div>';
-	var TMPL_CELL = '<div class="board-cell"></div>';
+	var TMPL_CELL = "\n<div class=\"board-cell\">\n\t<div class=\"empty\"></div>\n</div>";
 	var Board = (function (_super) {
 	    __extends(Board, _super);
 	    function Board(container, size) {
@@ -5517,7 +5533,7 @@
 	            this.el.appendChild(row);
 	            for (var j = 0; j < size; j++) {
 	                cell = component_1["default"].string2Element(TMPL_CELL);
-	                cell.dataset['cell'] = "[" + i + ", " + j + "]";
+	                cell.dataset['cell'] = "[" + i + "," + j + "]";
 	                cell.style.width = cssSize + "%";
 	                row.appendChild(cell);
 	            }
@@ -5536,10 +5552,21 @@
 	        }
 	    };
 	    Board.prototype.subscribeClick = function (callback) {
-	        return this.clickSubject.subscribe(callback);
+	        this.clickSubscription = this.clickSubject.subscribe(callback);
+	    };
+	    Board.prototype.setTile = function (i, j, tile) {
+	        var cell = this.el.querySelector("[data-cell=\"[" + i + "," + j + "]\"]");
+	        cell.firstElementChild.className = tile_1.tile2String(tile).toLowerCase();
+	    };
+	    Board.prototype.setTiles = function (board) {
+	        var _this = this;
+	        board.forEach(function (row, i) {
+	            row.forEach(function (tile, j) { return _this.setTile(i, j, tile); });
+	        });
 	    };
 	    Board.prototype.destroy = function () {
 	        this.el.removeEventListener('click', this.cellClickListener);
+	        this.clickSubscription.unsubscribe();
 	    };
 	    return Board;
 	}(component_1["default"]));

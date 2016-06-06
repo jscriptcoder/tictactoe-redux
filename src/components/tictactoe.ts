@@ -1,4 +1,5 @@
 import './tictactoe.scss';
+import { TILE } from './tile'
 import Component from './component'
 import { CellPosition, Board } from './board'
 
@@ -38,6 +39,14 @@ export default class TicTacToe extends Component {
 
 	public onBoardClick(callback: {(cellPos: CellPosition): void}) {
 		this.board.subscribeClick(callback);
+	}
+
+	public setTile(i: number, j: number, tile: TILE): void {
+		this.board.setTile(i, j, tile);
+	}
+
+	public setTiles(board: TILE[][]): void {
+		this.board.setTiles(board);
 	}
 
 	public destroy(): void {

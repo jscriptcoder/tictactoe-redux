@@ -2,15 +2,30 @@ import './index.scss'
 import { createStore } from 'redux'
 import { newMove } from './actions'
 import { tictactoe } from './reducers'
-import { TILE } from './state/tile'
+import { TILE } from './components/tile'
 import { CellPosition } from './components/board'
 import TicTacToeState from './state'
 import TicTacToe from './components/tictactoe'
 
+let tictactoeGame = new TicTacToe(document.getElementById('game'));
 let store = createStore<TicTacToeState>(tictactoe);
 
+tictactoeGame.onBoardClick((cellPos: CellPosition) => {
+    // an interaction occurred. Let's change the state
+	store.dispatch(newMove(cellPos.i, cellPos.j));
+});
+
 store.subscribe(() => {
-	console.log(store.getState() + '\n\n');
+	const tictactoeState = store.getState();
+	console.log(tictactoeState + '\n\n');
+	
+    // the state has changed. Let's notify the view
+    tictactoeGame.setTiles(tictactoeState.board);
+
+	if (tictactoeState.isWinner()) {
+		// todo
+	}
+
 });
 
 /*
@@ -40,8 +55,3 @@ store.dispatch(newMove(0, 2));
 store.dispatch(newMove(2, 1));
 store.dispatch(newMove(1, 2)); // last move
 */
-
-let tictactoeGame = new TicTacToe(document.getElementById('game'));
-tictactoeGame.onBoardClick((cellPos: CellPosition) => {
-	store.dispatch(newMove(cellPos.i, cellPos.j));
-});

@@ -1,4 +1,4 @@
-import { TILE, tile2String } from './tile'
+import { TILE, tile2String } from '../components/tile'
 
 // state of the game
 export default class TicTacToeState {
@@ -36,7 +36,7 @@ export default class TicTacToeState {
 		for (let i = 0; i < size; i++) {
 			strGame += '|   |   |   |\n';
 			for (let j = 0; j < size; j++) {
-				strGame += `| ${tile2String(this.board[i][j])} `;
+				strGame += `| ${tile2String(this.board[i][j], false)} `;
 			}
 			strGame += '|\n|   |   |   |\n';
 			strGame += '+---+---+---+\n';
