@@ -1,4 +1,4 @@
-# Tic Tac Toe and Redux architecture
+# TicTacToe and Redux architecture
 
 This is my first attempt to implement a redux application, and nothing better than this paper-and-pencil game, TicTacToe, to do so :-P.
 
