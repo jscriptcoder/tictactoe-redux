@@ -50,47 +50,41 @@
 	var actions_1 = __webpack_require__(19);
 	var reducers_1 = __webpack_require__(20);
 	var tictactoe_1 = __webpack_require__(24);
-	var tictactoeGame = new tictactoe_1["default"](document.getElementById('game'));
+	var tictactoeView = new tictactoe_1["default"](document.getElementById('game'));
 	var store = redux_1.createStore(reducers_1.tictactoe);
-	tictactoeGame.onBoardClick(function (cellPos) {
-	    // an interaction occurred. Let's change the state
-	    store.dispatch(actions_1.newMove(cellPos.i, cellPos.j));
+	// view interaction
+	tictactoeView.onBoardClick(function (cellPos) {
+	    var tictactoeState = store.getState();
+	    if (tictactoeState.isGameOver()) {
+	        // restarts the game
+	        store.dispatch(actions_1.init());
+	    }
+	    else if (cellPos.i >= 0 && cellPos.j >= 0) {
+	        // the user has clicked on the board. Let's change the state
+	        store.dispatch(actions_1.newMove(cellPos.i, cellPos.j));
+	    }
 	});
+	// change of state
 	store.subscribe(function () {
-	    // the state has changed. Let's notify the view
 	    var tictactoeState = store.getState();
 	    console.log(tictactoeState + '\n\n');
+	    // the state has changed. Let's notify the view
+	    tictactoeView.setTiles(tictactoeState.board);
 	    if (tictactoeState.isWinner()) {
+	        // we have a winner
+	        tictactoeView.setWinner(tictactoeState.winner);
+	    }
+	    else if (tictactoeState.isBoardFull()) {
+	        // not possible to move
+	        tictactoeView.draw();
 	    }
 	    else {
-	        tictactoeGame.setTiles(tictactoeState.board);
+	        // next player
+	        tictactoeView.setTurn(tictactoeState.turn);
 	    }
 	});
-	/*
-	store.dispatch(newMove(1, 1));
-	store.dispatch(newMove(0, 0));
-	store.dispatch(newMove(2, 0));
-	store.dispatch(newMove(0, 1));
-	store.dispatch(newMove(0, 2)); // last move
-	*/
-	/*
-	store.dispatch(newMove(0, 0));
-	store.dispatch(newMove(1, 0));
-	store.dispatch(newMove(0, 1));
-	store.dispatch(newMove(1, 1));
-	store.dispatch(newMove(0, 2)); // last move
-	store.dispatch(newMove(1, 2)); // won't happen
-	*/
-	/*
-	store.dispatch(newMove(1, 1));
-	store.dispatch(newMove(1, 0));
-	store.dispatch(newMove(0, 0));
-	store.dispatch(newMove(2, 2));
-	store.dispatch(newMove(2, 0));
-	store.dispatch(newMove(0, 2));
-	store.dispatch(newMove(2, 1));
-	store.dispatch(newMove(1, 2)); // last move
-	*/
+	// initial state
+	store.dispatch(actions_1.init());
 
 
 /***/ },
@@ -128,7 +122,7 @@
 
 
 	// module
-	exports.push([module.id, "html, body {\n  height: 100%; }\n\n* {\n  box-sizing: border-box; }\n\nbody {\n  margin: 0;\n  padding: 0;\n  background-color: lightgrey; }\n\n#game {\n  width: 300px;\n  height: 300px;\n  margin: auto; }\n", ""]);
+	exports.push([module.id, ".fullsize {\n  width: 100%;\n  height: 100%; }\n\n.clearfix {\n  overflow: hidden; }\n\n.unit {\n  float: left; }\n\n* {\n  box-sizing: border-box; }\n\nhtml, body {\n  height: 100%; }\n\nbody {\n  margin: 0;\n  padding: 0;\n  background-color: lightgrey;\n  font-family: Arial; }\n\n#game {\n  width: 300px;\n  height: 300px;\n  margin: auto; }\n\n@media screen and (min-width: 768px) {\n  #game {\n    width: 400px;\n    height: 400px; } }\n\n@media screen and (min-width: 1200px) {\n  #game {\n    width: 500px;\n    height: 500px; } }\n", ""]);
 
 	// exports
 
@@ -1387,12 +1381,16 @@
 
 	"use strict";
 	(function (ACTIONS) {
-	    ACTIONS[ACTIONS["NEW_MOVE"] = 0] = "NEW_MOVE";
-	    ACTIONS[ACTIONS["ADD_TILE"] = 1] = "ADD_TILE";
-	    ACTIONS[ACTIONS["CHANGE_TURN"] = 2] = "CHANGE_TURN";
+	    ACTIONS[ACTIONS["INIT"] = 0] = "INIT";
+	    ACTIONS[ACTIONS["NEW_MOVE"] = 1] = "NEW_MOVE";
+	    ACTIONS[ACTIONS["ADD_TILE"] = 2] = "ADD_TILE";
+	    ACTIONS[ACTIONS["CHANGE_TURN"] = 3] = "CHANGE_TURN";
 	})(exports.ACTIONS || (exports.ACTIONS = {}));
 	var ACTIONS = exports.ACTIONS;
 	// action creators
+	exports.init = function () {
+	    return { type: ACTIONS.INIT };
+	};
 	exports.newMove = function (i, j) {
 	    return { type: ACTIONS.NEW_MOVE, i: i, j: j };
 	};
@@ -1418,7 +1416,7 @@
 	    if (state === void 0) { state = initialState.board; }
 	    switch (action.type) {
 	        case actions_1.ACTIONS.ADD_TILE:
-	            var newState = state.slice();
+	            var newState = state.map(function (row) { return row.slice(); });
 	            newState[action.i][action.j] = action.tile;
 	            return newState;
 	        default:
@@ -1443,6 +1441,8 @@
 	exports.tictactoe = function (state, action) {
 	    if (state === void 0) { state = initialState; }
 	    switch (action.type) {
+	        case actions_1.ACTIONS.INIT:
+	            return initialState;
 	        case actions_1.ACTIONS.NEW_MOVE:
 	            if (state.canPlay(action.i, action.j)) {
 	                var newState = Object.assign(new state_1["default"](), {
@@ -5275,6 +5275,20 @@
 	    TicTacToeState.prototype.canPlay = function (i, j) {
 	        return this.isTileEmpty(i, j) && !this.isWinner();
 	    };
+	    TicTacToeState.prototype.isBoardFull = function () {
+	        for (var _i = 0, _a = this.board; _i < _a.length; _i++) {
+	            var tiles = _a[_i];
+	            for (var _b = 0, tiles_1 = tiles; _b < tiles_1.length; _b++) {
+	                var tile = tiles_1[_b];
+	                if (tile === tile_1.TILE.EMPTY)
+	                    return false;
+	            }
+	        }
+	        return true;
+	    };
+	    TicTacToeState.prototype.isGameOver = function () {
+	        return this.isWinner() || this.isBoardFull();
+	    };
 	    // for debugging purposes
 	    TicTacToeState.prototype.toString = function () {
 	        var size = this.board.length;
@@ -5391,6 +5405,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	__webpack_require__(25);
+	var tile_1 = __webpack_require__(23);
 	var component_1 = __webpack_require__(27);
 	var board_1 = __webpack_require__(28);
 	var TMPL = "\n<div class=\"tictactoe\">\n\t<h1>..:: Tic Tac Toe ::..</h1>\n\t<div class=\"tictactoe-inner\">\n\t\t<div class=\"tictactoe-board\"></div>\n\t\t<div class=\"tictactoe-info\"></div>\n\t</div>\n</div>\n";
@@ -5419,6 +5434,18 @@
 	    };
 	    TicTacToe.prototype.setTiles = function (board) {
 	        this.board.setTiles(board);
+	    };
+	    TicTacToe.prototype.setInfo = function (message) {
+	        this.info.innerHTML = message;
+	    };
+	    TicTacToe.prototype.setTurn = function (turn) {
+	        this.setInfo("Turn: <span>" + tile_1.tile2String(turn) + "<span>");
+	    };
+	    TicTacToe.prototype.setWinner = function (winner) {
+	        this.setInfo("Winner: <span>" + tile_1.tile2String(winner) + "<span>");
+	    };
+	    TicTacToe.prototype.draw = function () {
+	        this.setInfo('Players have drawn');
 	    };
 	    TicTacToe.prototype.destroy = function () {
 	        this.board.destroy();
@@ -5517,7 +5544,7 @@
 	    __extends(Board, _super);
 	    function Board(container, size) {
 	        _super.call(this, container);
-	        this.cellClickListener = this.cellClick.bind(this);
+	        this.clickListener = this.onClick.bind(this);
 	        this.clickSubject = new Subject_1.Subject();
 	        this.buildDOM(size);
 	    }
@@ -5538,18 +5565,29 @@
 	                row.appendChild(cell);
 	            }
 	        }
-	        this.el.addEventListener('click', this.cellClickListener);
+	        this.el.addEventListener('click', this.clickListener);
 	        this.container.appendChild(this.el);
 	    };
-	    Board.prototype.cellClick = function (mouseEvent) {
-	        var target = mouseEvent.target;
-	        if (target.classList.contains('board-cell')) {
-	            var datacell = JSON.parse(target.dataset['cell']);
-	            this.clickSubject.next({
-	                i: datacell[0],
-	                j: datacell[1]
-	            });
+	    Board.prototype.getDataCell = function (element) {
+	        var datacell;
+	        if (element.dataset['cell']) {
+	            datacell = JSON.parse(element.dataset['cell']);
 	        }
+	        else {
+	            datacell = [-1, -1];
+	        }
+	        return {
+	            i: datacell[0],
+	            j: datacell[1]
+	        };
+	    };
+	    Board.prototype.onClick = function (mouseEvent) {
+	        var element = mouseEvent.target;
+	        var cellPosition;
+	        if (element.parentElement.classList.contains('board-cell')) {
+	            element = element.parentElement;
+	        }
+	        this.clickSubject.next(this.getDataCell(element));
 	    };
 	    Board.prototype.subscribeClick = function (callback) {
 	        this.clickSubscription = this.clickSubject.subscribe(callback);
@@ -5565,7 +5603,7 @@
 	        });
 	    };
 	    Board.prototype.destroy = function () {
-	        this.el.removeEventListener('click', this.cellClickListener);
+	        this.el.removeEventListener('click', this.clickListener);
 	        this.clickSubscription.unsubscribe();
 	    };
 	    return Board;
@@ -5608,7 +5646,7 @@
 
 
 	// module
-	exports.push([module.id, ".fullsize, .board {\n  width: 100%;\n  height: 100%; }\n\n.clearfix, .board .board-row {\n  overflow: hidden; }\n\n.unit, .board .board-cell {\n  float: left; }\n\n.board .board-row {\n  border-bottom: 2px solid; }\n  .board .board-row:last-child {\n    border-bottom: 0; }\n\n.board .board-cell {\n  height: 100%;\n  border-right: 2px solid;\n  cursor: pointer; }\n  .board .board-cell:last-child {\n    border-right: 0; }\n", ""]);
+	exports.push([module.id, ".fullsize, .board, .board .board-cell .x,\n.board .board-cell .o {\n  width: 100%;\n  height: 100%; }\n\n.clearfix, .board .board-row {\n  overflow: hidden; }\n\n.unit, .board .board-cell {\n  float: left; }\n\n.board .board-row {\n  border-bottom: 2px solid; }\n  .board .board-row:last-child {\n    border-bottom: 0; }\n\n.board .board-cell {\n  height: 100%;\n  border-right: 2px solid;\n  padding: 10px;\n  cursor: pointer; }\n  .board .board-cell:last-child {\n    border-right: 0; }\n  .board .board-cell .x,\n  .board .board-cell .o {\n    position: relative; }\n  .board .board-cell .x:before,\n  .board .board-cell .x:after {\n    content: \"\";\n    display: block;\n    width: 100%;\n    height: 15px;\n    position: absolute;\n    top: 40%;\n    background-color: darkgrey;\n    border-radius: 4px; }\n  .board .board-cell .x:before {\n    transform: rotate(-45deg); }\n  .board .board-cell .x:after {\n    transform: rotate(45deg); }\n  .board .board-cell .o {\n    border: 15px solid darkgrey;\n    border-radius: 50%; }\n\n@media screen and (min-width: 768px) {\n  .board .board-cell .x:before,\n  .board .board-cell .x:after {\n    top: 42%; } }\n\n@media screen and (min-width: 1200px) {\n  .board .board-cell .x:before,\n  .board .board-cell .x:after {\n    top: 44%; } }\n", ""]);
 
 	// exports
 

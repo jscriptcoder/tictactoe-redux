@@ -15,7 +15,7 @@ export const board = (state: TILE[][] = initialState.board, action: ActionTile):
 	switch (action.type) {
 
 		case ACTIONS.ADD_TILE:
-			let newState: TILE[][] = state.slice();
+			let newState: TILE[][] = state.map((row: TILE[]) => row.slice());
 			newState[action.i][action.j] = action.tile;
 			return newState;
 
@@ -43,6 +43,9 @@ export const turn = (state: TILE = initialState.turn, action: ActionTurn): TILE 
 export const tictactoe = (state: TicTacToeState = initialState, action: ActionMove): TicTacToeState => {
 	switch (action.type) {
 
+		case ACTIONS.INIT:
+			return initialState;
+
 		case ACTIONS.NEW_MOVE:
 			if (state.canPlay(action.i, action.j)) {
 
@@ -55,6 +58,7 @@ export const tictactoe = (state: TicTacToeState = initialState, action: ActionMo
 					// game over
 					newState.winner = state.turn;
 					newState.turn = TILE.EMPTY;
+
 				} else {
 					newState.turn = turn(state.turn, changeTurn())
 				}

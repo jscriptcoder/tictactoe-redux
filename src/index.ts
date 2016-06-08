@@ -1,57 +1,50 @@
 import './index.scss'
 import { createStore } from 'redux'
-import { newMove } from './actions'
+import { init, newMove } from './actions'
 import { tictactoe } from './reducers'
 import { TILE } from './components/tile'
 import { CellPosition } from './components/board'
 import TicTacToeState from './state'
 import TicTacToe from './components/tictactoe'
 
-let tictactoeGame = new TicTacToe(document.getElementById('game'));
+let tictactoeView = new TicTacToe(document.getElementById('game'));
 let store = createStore<TicTacToeState>(tictactoe);
 
-tictactoeGame.onBoardClick((cellPos: CellPosition) => {
-    // an interaction occurred. Let's change the state
-	store.dispatch(newMove(cellPos.i, cellPos.j));
+
+// view interaction
+tictactoeView.onBoardClick((cellPos: CellPosition) => {
+	const tictactoeState = store.getState();
+
+	if (tictactoeState.isGameOver()) {
+		// restarts the game
+		store.dispatch(init());
+	} else if (cellPos.i >= 0 && cellPos.j >= 0) {
+		// the user has clicked on the board. Let's change the state
+		store.dispatch(newMove(cellPos.i, cellPos.j));
+	}
 });
 
+
+// change of state
 store.subscribe(() => {
 	const tictactoeState = store.getState();
 	console.log(tictactoeState + '\n\n');
 	
     // the state has changed. Let's notify the view
-    tictactoeGame.setTiles(tictactoeState.board);
+    tictactoeView.setTiles(tictactoeState.board);
 
 	if (tictactoeState.isWinner()) {
-		// todo
+		// we have a winner
+		tictactoeView.setWinner(tictactoeState.winner);
+	} else if (tictactoeState.isBoardFull()) {
+		// not possible to move
+		tictactoeView.draw();
+	} else {
+		// next player
+		tictactoeView.setTurn(tictactoeState.turn);
 	}
 
 });
 
-/*
-store.dispatch(newMove(1, 1));
-store.dispatch(newMove(0, 0));
-store.dispatch(newMove(2, 0));
-store.dispatch(newMove(0, 1));
-store.dispatch(newMove(0, 2)); // last move
-*/
-
-/*
-store.dispatch(newMove(0, 0));
-store.dispatch(newMove(1, 0));
-store.dispatch(newMove(0, 1));
-store.dispatch(newMove(1, 1));
-store.dispatch(newMove(0, 2)); // last move
-store.dispatch(newMove(1, 2)); // won't happen
-*/
-
-/*
-store.dispatch(newMove(1, 1));
-store.dispatch(newMove(1, 0));
-store.dispatch(newMove(0, 0));
-store.dispatch(newMove(2, 2));
-store.dispatch(newMove(2, 0));
-store.dispatch(newMove(0, 2));
-store.dispatch(newMove(2, 1));
-store.dispatch(newMove(1, 2)); // last move
-*/
+// initial state
+store.dispatch(init());

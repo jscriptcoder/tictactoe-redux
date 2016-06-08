@@ -1,12 +1,15 @@
 import { TILE } from '../components/tile';
 
 export enum ACTIONS {
+	INIT,
 	NEW_MOVE,
 	ADD_TILE,
 	CHANGE_TURN
 }
 
 interface Action { type: ACTIONS }
+
+export interface ActionInit extends Action {}
 
 export interface ActionMove extends Action {
 	i: number;
@@ -20,6 +23,10 @@ export interface ActionTile extends ActionMove {
 export interface ActionTurn extends Action {}
 
 // action creators
+export const init = (): ActionInit => {
+	return { type: ACTIONS.INIT }
+}
+
 export const newMove = (i: number, j: number): ActionMove => {
 	return { type: ACTIONS.NEW_MOVE, i, j }
 }

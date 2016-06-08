@@ -19,14 +19,14 @@ export interface CellPosition {
 
 export class Board extends Component {
 
-	private cellClickListener: EventListener;
+	private clickListener: EventListener;
 	private clickSubject: Subject<CellPosition>;
 	private clickSubscription: Subscription;
 
 	constructor(container: HTMLElement, size?: number) {
 		super(container);
 
-		this.cellClickListener = this.cellClick.bind(this);
+		this.clickListener = this.onClick.bind(this);
 		this.clickSubject = new Subject();
 
 		this.buildDOM(size);
@@ -53,20 +53,35 @@ export class Board extends Component {
 			}
 		}
 
-		this.el.addEventListener('click', this.cellClickListener);
+		this.el.addEventListener('click', this.clickListener);
 
 		this.container.appendChild(this.el);
 	}
 
-	private cellClick(mouseEvent: MouseEvent): void {
-		const target = <HTMLElement>mouseEvent.target;
-		if (target.classList.contains('board-cell')) {
-			const datacell = JSON.parse(target.dataset['cell']);
-			this.clickSubject.next(<CellPosition>{
-				i: datacell[0],
-				j: datacell[1]
-			});
+	private getDataCell(element: HTMLElement): CellPosition {
+		let datacell: number[];
+
+		if (element.dataset['cell']) {
+			datacell = JSON.parse(element.dataset['cell'])
+		} else {
+			datacell = [-1, -1];
 		}
+
+		return {
+			i: datacell[0],
+			j: datacell[1]
+		};
+	}
+
+	private onClick(mouseEvent: MouseEvent): void {
+		let element = <HTMLElement>mouseEvent.target;
+		let cellPosition: CellPosition;
+
+		if (element.parentElement.classList.contains('board-cell')) {
+			element = element.parentElement;
+		}
+
+		this.clickSubject.next(this.getDataCell(element));
 	}
 
 	public subscribeClick(callback: {(cellPos: CellPosition): void}): void {
@@ -85,7 +100,7 @@ export class Board extends Component {
 	}
 
 	public destroy(): void {
-		this.el.removeEventListener('click', this.cellClickListener);
+		this.el.removeEventListener('click', this.clickListener);
 		this.clickSubscription.unsubscribe();
 	}
 

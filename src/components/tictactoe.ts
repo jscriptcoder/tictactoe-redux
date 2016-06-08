@@ -1,5 +1,5 @@
 import './tictactoe.scss';
-import { TILE } from './tile'
+import { TILE, tile2String } from './tile'
 import Component from './component'
 import { CellPosition, Board } from './board'
 
@@ -47,6 +47,22 @@ export default class TicTacToe extends Component {
 
 	public setTiles(board: TILE[][]): void {
 		this.board.setTiles(board);
+	}
+
+	private setInfo(message: string): void {
+		this.info.innerHTML = message;
+	}
+
+	public setTurn(turn: TILE): void {
+		this.setInfo(`Turn: <span>${tile2String(turn)}<span>`);
+	}
+
+	public setWinner(winner: TILE): void {
+		this.setInfo(`Winner: <span>${tile2String(winner)}<span>`);
+	}
+
+	public draw() {
+		this.setInfo('Players have drawn');
 	}
 
 	public destroy(): void {

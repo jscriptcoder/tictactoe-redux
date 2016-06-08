@@ -26,20 +26,22 @@
             position: relative;
         }
 
+        // cross -> X
         & .x:before,
         & .x:after {
+            content: "";
+            display: block;
             width: 100%;
             height: $tile-width;
             position: absolute;
             top: $x-top-small;
-            content: "";
-            display: block;
             background-color: $tile-color;
             border-radius: 4px;
         }
         & .x:before { transform: rotate(-45deg); }
         & .x:after { transform: rotate(45deg); }
 
+        // circle -> O
         & .o {
             border: $tile-width solid $tile-color;
             border-radius: 50%;

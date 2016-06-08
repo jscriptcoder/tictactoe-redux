@@ -28,6 +28,19 @@ export default class TicTacToeState {
 		return this.isTileEmpty(i, j) && !this.isWinner();
 	}
 
+	public isBoardFull(): boolean {
+		for (let tiles of this.board) {
+			for (let tile of tiles) {
+				if (tile === TILE.EMPTY) return false;
+			}
+		}
+		return true;
+	}
+
+	public isGameOver(): boolean {
+		return this.isWinner() || this.isBoardFull();
+	}
+
 	// for debugging purposes
 	public toString(): string {
 		const size = this.board.length;
