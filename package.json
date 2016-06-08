@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "typings install es6-shim --global",
-    "start": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/"
+    "postinstall": "typings install dt~es6-shim --global",
+    "server": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/",
+    "server-with-browser": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jscriptcoder/tictactoe-redux.git"
   },
-  "author": "jscriptcoder@gmail.com",
+  "author": "Francisco Ramos <jscriptcoder@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jscriptcoder/tictactoe-redux/issues"
