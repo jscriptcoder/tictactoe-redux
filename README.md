@@ -17,4 +17,4 @@ $ npm install
 $ npm run server
 ```
 
-Open <http://localhost:8080/webpack-dev-server> and have fun :-)
+Open <http://localhost:8080/webpack-dev-server/> and have fun :-)
