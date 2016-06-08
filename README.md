@@ -10,11 +10,18 @@ Open a terminal or command line and run following commands:
 $ git clone https://github.com/jscriptcoder/tictactoe-redux.git
 $ cd ticktactoe-redux
 ```
+<<<<<<< HEAD
 
 ##Installing and running
 ```shell
 $ npm install
 $ npm run server
+=======
+git clone https://github.com/jscriptcoder/tictactoe-redux.git
+cd tictactoe-redux
+npm install
+npm run start
+>>>>>>> dbf86ea6b774dec7d037ebfb3bc5705f1d47b6e7
 ```
 
 Have fun :-)
