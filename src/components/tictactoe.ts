@@ -54,11 +54,11 @@ export default class TicTacToe extends Component {
 	}
 
 	public setTurn(turn: TILE): void {
-		this.setInfo(`Turn: <span>${tile2String(turn)}<span>`);
+		this.setInfo(`Turn &rarr; <span>${tile2String(turn)}</span>`);
 	}
 
 	public setWinner(winner: TILE): void {
-		this.setInfo(`Winner: <span>${tile2String(winner)}<span>`);
+		this.setInfo(`Winner &laquo; <span>${tile2String(winner)}</span> &raquo;`);
 	}
 
 	public draw() {

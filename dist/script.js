@@ -5439,10 +5439,10 @@
 	        this.info.innerHTML = message;
 	    };
 	    TicTacToe.prototype.setTurn = function (turn) {
-	        this.setInfo("Turn: <span>" + tile_1.tile2String(turn) + "<span>");
+	        this.setInfo("Turn &rarr; <span>" + tile_1.tile2String(turn) + "</span>");
 	    };
 	    TicTacToe.prototype.setWinner = function (winner) {
-	        this.setInfo("Winner: <span>" + tile_1.tile2String(winner) + "<span>");
+	        this.setInfo("Winner &laquo; <span>" + tile_1.tile2String(winner) + "</span> &raquo;");
 	    };
 	    TicTacToe.prototype.draw = function () {
 	        this.setInfo('Players have drawn');
@@ -5491,7 +5491,7 @@
 
 
 	// module
-	exports.push([module.id, ".fullsize, .tictactoe, .tictactoe .tictactoe-inner,\n.tictactoe .tictactoe-board {\n  width: 100%;\n  height: 100%; }\n\n.clearfix {\n  overflow: hidden; }\n\n.unit {\n  float: left; }\n\n.tictactoe h1 {\n  text-align: center; }\n", ""]);
+	exports.push([module.id, ".fullsize, .tictactoe, .tictactoe .tictactoe-inner,\n.tictactoe .tictactoe-board {\n  width: 100%;\n  height: 100%; }\n\n.clearfix {\n  overflow: hidden; }\n\n.unit {\n  float: left; }\n\n.tictactoe h1 {\n  text-align: center;\n  margin: 10px;\n  border-bottom: 2px ridge; }\n\n.tictactoe .tictactoe-info {\n  border-top: 2px groove;\n  margin-top: 10px;\n  padding-top: 10px; }\n  .tictactoe .tictactoe-info span {\n    font-weight: bold; }\n", ""]);
 
 	// exports
 

@@ -4,7 +4,11 @@
 
 	@extend .fullsize;
 
-	h1 { text-align: center; }
+	h1 {
+		text-align: center;
+		margin: 10px;
+		border-bottom: 2px ridge;
+	}
 
 	.tictactoe-inner, 
 	.tictactoe-board {
@@ -12,6 +16,10 @@
 	}
 
 	.tictactoe-info {
+		border-top: 2px groove;
+		margin-top: 10px;
+		padding-top: 10px;
 
+		span { font-weight: bold; }
 	}
 }
