@@ -10,7 +10,6 @@ Open a terminal or command line and run following commands:
 $ git clone https://github.com/jscriptcoder/tictactoe-redux.git
 $ cd ticktactoe-redux
 ```
-<<<<<<< HEAD
 
 ##Installing and running
 ```shell
