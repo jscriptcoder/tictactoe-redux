@@ -7,7 +7,7 @@ The game is written in TypeScript using ES6 Module System, built with Webpack, a
 How to run it. Open a terminal or command line and run following commands:
 ```
 git clone https://github.com/jscriptcoder/tictactoe-redux.git
-cd ticktactoe-redux
+cd tictactoe-redux
 npm install
 npm run start
 ```
