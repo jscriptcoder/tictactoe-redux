@@ -14,7 +14,7 @@ $ cd tictactoe-redux
 ##Installing and running
 ```shell
 $ npm install
-$ npm run server
+$ npm run start
 ```
 
 Open <http://localhost:8080/webpack-dev-server/> and have fun :-)
