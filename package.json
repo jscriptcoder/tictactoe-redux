@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "typings install dt~es6-shim --global",
+    "postinstall": "typings install",
     "server": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/",
     "server-with-browser": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/"
   },
