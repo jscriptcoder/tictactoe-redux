@@ -15,37 +15,37 @@
 		@extend .unit;
 		height: 100%;
 		border-right: 2px solid;
-        padding: 10px;
+        	padding: 10px;
 		cursor: pointer;
 
 		&:last-child { border-right: 0; }
 
-        & .x,
-        & .o {
-            @extend .fullsize;
-            position: relative;
-        }
+        	& .x,
+        	& .o {
+            		@extend .fullsize;
+            		position: relative;
+        	}
 
-        // cross -> X
-        & .x:before,
-        & .x:after {
-            content: "";
-            display: block;
-            width: 100%;
-            height: $tile-width;
-            position: absolute;
-            top: $x-top-small;
-            background-color: $tile-color;
-            border-radius: 4px;
-        }
-        & .x:before { transform: rotate(-45deg); }
-        & .x:after { transform: rotate(45deg); }
-
-        // circle -> O
-        & .o {
-            border: $tile-width solid $tile-color;
-            border-radius: 50%;
-        }
+	        // cross -> X
+	        & .x:before,
+	        & .x:after {
+	            content: "";
+	            display: block;
+	            width: 100%;
+	            height: $tile-width;
+	            position: absolute;
+	            top: $x-top-small;
+	            background-color: $tile-color;
+	            border-radius: 4px;
+	        }
+	        & .x:before { transform: rotate(-45deg); }
+	        & .x:after { transform: rotate(45deg); }
+	
+	        // circle -> O
+	        & .o {
+	            border: $tile-width solid $tile-color;
+	            border-radius: 50%;
+	        }
 	}
 	
 }
