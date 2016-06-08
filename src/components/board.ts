@@ -94,9 +94,9 @@ export class Board extends Component {
 	}
 
 	public setTiles(board: TILE[][]): void {
-	    board.forEach((row: TILE[], i: number) => {
-            row.forEach((tile: TILE, j: number) => this.setTile(i, j, tile));
-        });
+		board.forEach((row: TILE[], i: number) => {
+			row.forEach((tile: TILE, j: number) => this.setTile(i, j, tile));
+		});
 	}
 
 	public destroy(): void {
