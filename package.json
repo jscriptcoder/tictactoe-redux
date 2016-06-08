@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "typings install es6-shim --global",
     "start": "webpack-dev-server & google-chrome http://localhost:8080/webpack-dev-server/"
   },
   "repository": {
@@ -18,13 +18,15 @@
   },
   "homepage": "https://github.com/jscriptcoder/tictactoe-redux#readme",
   "devDependencies": {
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
+    "ts-loader": "^0.8.2",
     "css-loader": "^0.23.1",
     "node-sass": "^3.7.0",
     "sass-loader": "^3.2.0",
-    "style-loader": "^0.13.1",
-    "ts-loader": "^0.8.2",
-    "typescript": "^1.8.10",
-    "webpack": "^1.13.1"
+    "style-loader": "^0.13.1"
   },
   "dependencies": {
     "es6-shim": "^0.35.1",
