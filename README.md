@@ -4,6 +4,8 @@ This is my first attempt to implement a redux application, and nothing better th
 
 The game is written in TypeScript using ES6 Module System, built with Webpack, and has RxJS and Redux as main dependencies.
 
+[Click here for demo](https://film-chant.codio.io/)
+
 ## Download source
 Open a terminal or command line and run following commands:
 ```shell
